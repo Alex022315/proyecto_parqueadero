@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parqueadero</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f2f2f2; }
+        table { width: 100%; background: white; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
+        .paginacion a {
+            margin: 5px; padding: 8px 12px; background: #007bff; color: white;
+            text-decoration: none; border-radius: 5px;
+        }
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: flex; justify-content: center;
+            align-items: center; visibility: hidden;
+        }
+        .modal.show { visibility: visible; }
+        .form-box {
+            background: white; padding: 20px; width: 300px; border-radius: 10px;
+        }
+        input { width: 100%; padding: 10px; margin-top: 10px; }
+        button { width: 100%; padding: 10px; background: green; color: white; border: none; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Listado de Parqueaderos</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Placa</th>
+        <th>Tipo Usuario</th>
+        <th>Estado</th>
+        <th>Ingreso</th>
+        <th>Salida</th>
+    </tr>
+
+    {% for p in lista %}
+    <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.placa or "-" }}</td>
+        <td>{{ p.tipo_usuario }}</td>
+        <td>{{ p.estado }}</td>
+        <td>{{ p.hora_ingreso or "-" }}</td>
+        <td>{{ p.hora_salida or "-" }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="paginacion">
+    {% for i in range(1, total_pages + 1) %}
+        <a href="?page={{ i }}">{{ i }}</a>
+    {% endfor %}
+</div>
+
+<!-- MODAL DE ENTRADA -->
+<div id="modalEntrada" class="modal {% if formulario == 'entrada' %}show{% endif %}">
+    <div class="form-box">
+        <h3>Registrar Entrada</h3>
+        <form method="POST" action="/registrar_entrada">
+            <label>Placa</label>
+            <input type="text" name="placa" required>
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL DE SALIDA -->
+<div id="modalSalida" class="modal {% if formulario == 'salida' %}show{% endif %}">
+    <div class="form-box">
+        <h3>Registrar Salida</h3>
+        <form method="POST" action="/registrar_salida">
+            <label>Placa</label>
+            <input type="text" name="placa" required>
+            <button type="submit">Liberar</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
